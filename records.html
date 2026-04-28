@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Records — SugarSense{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">📊 All Farm Records</h1>
+  <p class="page-sub">{{ records|length }} entr{{ 'y' if records|length == 1 else 'ies' }} recorded</p>
+  <a href="{{ url_for('home') }}" class="btn btn--primary">➕ New Entry</a>
+</div>
+
+{% if records %}
+<!-- Search bar -->
+<div class="search-bar-wrap">
+  <input type="text" id="tableSearch" placeholder="🔍  Search by name, crop, or soil type…" class="search-input" />
+</div>
+
+<div class="table-wrapper">
+  <table class="data-table" id="recordsTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Farmer</th>
+        <th>Crop Variety</th>
+        <th>Soil</th>
+        <th>Area (ac)</th>
+        <th>Irrig. (days)</th>
+        <th>Fertilizer</th>
+        <th>Cost (₹)</th>
+        <th>Planted</th>
+        <th>Water (L)</th>
+        <th>Yield (t)</th>
+        <th>Sugar (kg)</th>
+        <th>Harvest</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td>{{ r['id'] }}</td>
+        <td><strong>{{ r['farmer_name'] }}</strong></td>
+        <td><span class="badge badge--crop">{{ r['crop_type'] }}</span></td>
+        <td><span class="badge badge--soil badge--{{ r['soil_type'] }}">{{ r['soil_type']|capitalize }}</span></td>
+        <td>{{ r['land_area'] }}</td>
+        <td>{{ r['irrigation_interval'] }}</td>
+        <td>{{ r['fertilizer_used'] }}</td>
+        <td>{{ "{:,.0f}".format(r['fertilizer_cost']) }}</td>
+        <td>{{ r['date_of_planting'] }}</td>
+        <td>{{ "{:,.0f}".format(r['water_usage']) }}</td>
+        <td>{{ "{:,.2f}".format(r['yield_tons']) }}</td>
+        <td>{{ "{:,.0f}".format(r['sugar_output_kg']) }}</td>
+        <td><strong class="harvest-pill">{{ r['harvest_date'] }}</strong></td>
+        <td class="actions-cell">
+          <a href="{{ url_for('result', record_id=r['id']) }}"
+             class="btn btn--xs btn--secondary">View</a>
+
+          <form method="POST"
+                action="{{ url_for('delete_record', record_id=r['id']) }}"
+                onsubmit="return confirm('Delete this record? This cannot be undone.')">
+            <button type="submit" class="btn btn--xs btn--danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Summary strip -->
+<div class="summary-strip">
+  <div class="summary-item">
+    <span class="s-label">Total Land</span>
+    <span class="s-val">{{ "%.1f"|format(records|sum(attribute='land_area')) }} acres</span>
+  </div>
+  <div class="summary-item">
+    <span class="s-label">Total Yield</span>
+    <span class="s-val">{{ "%.2f"|format(records|sum(attribute='yield_tons')) }} t</span>
+  </div>
+  <div class="summary-item">
+    <span class="s-label">Total Sugar</span>
+    <span class="s-val">{{ "{:,.0f}".format(records|sum(attribute='sugar_output_kg')) }} kg</span>
+  </div>
+  <div class="summary-item">
+    <span class="s-label">Total Fertilizer Cost</span>
+    <span class="s-val">₹ {{ "{:,.0f}".format(records|sum(attribute='fertilizer_cost')) }}</span>
+  </div>
+</div>
+
+{% else %}
+<!-- Empty state -->
+<div class="empty-state">
+  <div class="empty-icon">🌾</div>
+  <h2>No records yet</h2>
+  <p>Add your first farm entry to start tracking.</p>
+  <a href="{{ url_for('home') }}" class="btn btn--primary">➕ Add First Entry</a>
+</div>
+{% endif %}
+{% endblock %}
