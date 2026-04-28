@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}New Entry — SugarSense{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-text">
+    <h1 class="hero-title">Sugarcane<br><em>Farm Manager</em></h1>
+    <p class="hero-sub">Enter your farm details below and let SugarSense calculate yield, water usage, sugar output, and harvest dates — instantly.</p>
+  </div>
+  <div class="hero-art" aria-hidden="true">
+    <div class="cane-art">🎋</div>
+  </div>
+</section>
+
+<div class="card form-card">
+  <h2 class="card-title"><span class="title-icon">📝</span> Farm Entry Form</h2>
+  <form action="{{ url_for('submit') }}" method="POST" id="farm-form" novalidate>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="farmer_name">Farmer Name <span class="req">*</span></label>
+        <input type="text" id="farmer_name" name="farmer_name" placeholder="e.g. Ramesh Patil" required autocomplete="name" />
+        <span class="field-hint">Full name of the farmer</span>
+      </div>
+      <div class="form-group">
+        <label for="crop_type">Sugarcane Variety <span class="req">*</span></label>
+        <select id="crop_type" name="crop_type" required>
+          <option value="" disabled selected>— Select variety —</option>
+          <option value="Co 86032">Co 86032 (High yield)</option>
+          <option value="CoM 0265">CoM 0265 (High sugar)</option>
+          <option value="CoC 671">CoC 671 (Drought resistant)</option>
+          <option value="CoS 767">CoS 767 (Early harvest)</option>
+          <option value="Co 419">Co 419 (All-purpose)</option>
+          <option value="CoJ 64">CoJ 64 (Rainfed)</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="land_area">Land Area (acres) <span class="req">*</span></label>
+        <input type="number" id="land_area" name="land_area" placeholder="e.g. 5.5" min="0.1" step="0.1" required />
+        <span class="field-hint">Total cultivable area</span>
+      </div>
+      <div class="form-group">
+        <label for="soil_type">Soil Type <span class="req">*</span></label>
+        <select id="soil_type" name="soil_type" required>
+          <option value="" disabled selected>— Select soil —</option>
+          <option value="loamy">Loamy (Best)</option>
+          <option value="clay">Clay</option>
+          <option value="sandy">Sandy</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="irrigation_interval">Irrigation Interval (days) <span class="req">*</span></label>
+        <input type="number" id="irrigation_interval" name="irrigation_interval" placeholder="e.g. 7" min="1" max="60" step="1" required />
+        <span class="field-hint">Days between each watering session</span>
+      </div>
+      <div class="form-group">
+        <label for="date_of_planting">Date of Planting <span class="req">*</span></label>
+        <input type="date" id="date_of_planting" name="date_of_planting" required />
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="fertilizer_used">Fertilizer Used <span class="req">*</span></label>
+        <input type="text" id="fertilizer_used" name="fertilizer_used" placeholder="e.g. Urea + DAP" required />
+        <span class="field-hint">Type(s) of fertilizer applied</span>
+      </div>
+      <div class="form-group">
+        <label for="fertilizer_cost">Fertilizer Cost (₹) <span class="req">*</span></label>
+        <input type="number" id="fertilizer_cost" name="fertilizer_cost" placeholder="e.g. 12000" min="0" step="1" required />
+        <span class="field-hint">Total cost of fertilizers in INR</span>
+      </div>
+    </div>
+    <button type="submit" class="btn btn--primary btn--large"><span>⚡</span> Calculate &amp; Save</button>
+  </form>
+</div>
+
+<div class="tip-grid">
+  <div class="tip-card"><div class="tip-icon">💧</div><h3>Water Usage</h3><p>Calculated from your land area and irrigation interval over a full growing season.</p></div>
+  <div class="tip-card"><div class="tip-icon">🌾</div><h3>Yield Estimate</h3><p>Based on crop variety, soil type, and land area using agricultural benchmarks.</p></div>
+  <div class="tip-card"><div class="tip-icon">🍬</div><h3>Sugar Output</h3><p>Derived from estimated yield and the extraction rate of the chosen variety.</p></div>
+  <div class="tip-card"><div class="tip-icon">📅</div><h3>Harvest Date</h3><p>Projected from planting date &amp; crop growth period.</p></div>
+</div>
+{% endblock %}
