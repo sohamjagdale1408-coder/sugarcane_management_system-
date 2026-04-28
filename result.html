@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Results — SugarSense{% endblock %}
+
+{% block content %}
+<div class="result-header">
+  <div class="result-badge">✓ Calculated</div>
+  <h1 class="result-title">Farm Analysis Complete</h1>
+  <p class="result-sub">
+    Results for <strong>{{ record['farmer_name'] }}</strong> —
+    recorded on {{ record['created_at'][:10] }}
+  </p>
+</div>
+
+<!-- ── Input Summary ─────────────────────────────────────────── -->
+<div class="card">
+  <h2 class="card-title"><span class="title-icon">🌱</span> Farm Details</h2>
+  <div class="detail-grid">
+    <div class="detail-item">
+      <span class="detail-label">Farmer</span>
+      <span class="detail-value">{{ record['farmer_name'] }}</span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Crop Variety</span>
+      <span class="detail-value">{{ record['crop_type'] }}</span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Soil Type</span>
+      <span class="detail-value">{{ record['soil_type']|capitalize }}</span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Land Area</span>
+      <span class="detail-value">{{ record['land_area'] }} acres</span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Irrigation Every</span>
+      <span class="detail-value">{{ record['irrigation_interval'] }} days</span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Planting Date</span>
+      <span class="detail-value">{{ record['date_of_planting'] }}</span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Fertilizer Used</span>
+      <span class="detail-value">{{ record['fertilizer_used'] }}</span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Fertilizer Cost</span>
+      <span class="detail-value">₹ {{ "{:,.0f}".format(record['fertilizer_cost']) }}</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Result Metrics ────────────────────────────────────────── -->
+<h2 class="section-heading">📊 Calculated Results</h2>
+<div class="metric-grid">
+
+  <div class="metric-card metric-card--water">
+    <div class="metric-icon">💧</div>
+    <div class="metric-body">
+      <span class="metric-label">Total Water Usage</span>
+      <span class="metric-value">{{ "{:,.0f}".format(record['water_usage']) }}</span>
+      <span class="metric-unit">litres / season</span>
+    </div>
+  </div>
+
+  <div class="metric-card metric-card--yield">
+    <div class="metric-icon">🌾</div>
+    <div class="metric-body">
+      <span class="metric-label">Estimated Yield</span>
+      <span class="metric-value">{{ "{:,.2f}".format(record['yield_tons']) }}</span>
+      <span class="metric-unit">metric tons</span>
+    </div>
+  </div>
+
+  <div class="metric-card metric-card--sugar">
+    <div class="metric-icon">🍬</div>
+    <div class="metric-body">
+      <span class="metric-label">Sugar Production</span>
+      <span class="metric-value">{{ "{:,.0f}".format(record['sugar_output_kg']) }}</span>
+      <span class="metric-unit">kilograms</span>
+    </div>
+  </div>
+
+  <div class="metric-card metric-card--cost">
+    <div class="metric-icon">💰</div>
+    <div class="metric-body">
+      <span class="metric-label">Fertilizer Cost</span>
+      <span class="metric-value">₹ {{ "{:,.0f}".format(record['fertilizer_cost']) }}</span>
+      <span class="metric-unit">total investment</span>
+    </div>
+  </div>
+
+  <div class="metric-card metric-card--harvest metric-card--wide">
+    <div class="metric-icon">📅</div>
+    <div class="metric-body">
+      <span class="metric-label">Expected Harvest Date</span>
+      <span class="metric-value harvest-date">{{ record['harvest_date'] }}</span>
+      <span class="metric-unit">based on planting date &amp; crop variety</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Action Buttons ────────────────────────────────────────── -->
+<div class="action-row">
+  <a href="{{ url_for('home') }}"    class="btn btn--primary">  ➕ New Entry</a>
+  <a href="{{ url_for('records') }}" class="btn btn--secondary">📊 View All Records</a>
+  <button onclick="window.print()"   class="btn btn--ghost">    🖨 Print</button>
+</div>
+{% endblock %}
